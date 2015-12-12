@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<body>
+      <div class="container">
+        <h3>Action Items</h3>
+        <style>
+          table thead { display:block; }
+          table tbody { height:550px; overflow-y:scroll; display:block; }
+        </style>
+
+        <table st-table="meetings" class="table table-striped">
+          <thead>
+          <tr>
+            <th>Meeting</th>
+            <th>Summary</th>
+            <th>Status</th>
+            <th><a href="#/new"><i class="glyphicon glyphicon-plus"></i></a></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="meeting in meetings">
+            <td ng-if="meeting.MeetingID>0">{{ meeting.ArID }}</td>
+            <td><button class="btn-link" data-toggle="modal" data-target="#myModal" ng-click="editAR(meeting.ArID)">{{meeting.Summary}}</button></td>
+            <td>{{meeting.Status}}</td>
+            <td>
+              <button class="btn-link" data-toggle="modal" data-target="#myModal" ng-click="editAR(meeting.ArID)">
+                <span class="glyphicon glyphicon-pencil"></span>
+              </button>
+            </td>
+            <td>
+              <button class="btn-link" ng-click="deleteAR(meeting.ArID)">
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+  </div>
+  </body>
+  </html>
