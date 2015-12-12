@@ -6,7 +6,7 @@ To execute:<br>
 
 At the backend I'm running node with several packages:<br>
 <code>
-   $ sudo apt-get install nodejs
+   $ sudo apt-get install nodejs<br>
    $ npm init
    $ npm install express
    $ npm install mysql
