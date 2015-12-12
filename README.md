@@ -1,16 +1,16 @@
 # ars
-A system for managing project "action-required items" (ARs)
+A system for managing project "action-required items" (ARs)<br>
 
-To execute:
+To execute:<br>
 $ nodejs ars-server.js
 
-At the backend I'm running node with several packages:
-$ sudo apt-get install nodejs
-$ npm init
-$ npm install express
-$ npm install mysql
-$ npm install socket.io
-$ npm install body-parser
+At the backend I'm running node with several packages:<br>
+$ sudo apt-get install nodejs<br>
+$ npm init<br>
+$ npm install express<br>
+$ npm install mysql<br>
+$ npm install socket.io<br>
+$ npm install body-parser<br>
 
 I chose a relational database.  Despite the no-sql hype this just makes more sense here, and the joins that I will need, will be more effective than "manual joins" with e.g. mongodb.
 
