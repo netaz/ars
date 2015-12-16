@@ -1,0 +1,68 @@
+<!-- Include Bootstrap Datepicker -->
+<div id="myModal" class="modal fade" role="dialog" style="overflow:scroll;">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit AR</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal"  role="form">
+
+          <div class="form-group">
+            <label class="col-md-2 control-label">Open Date</label>
+            <div class="col-md-4">
+                <p class="input-group">
+                  <input type="date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="true" min-date="new Date()" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+                </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">Open Date</label>
+            <div class="col-md-4">
+                <p class="input-group">
+                  <input type="date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="true" min-date="new Date()" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+                </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Description</label>
+            <div class="col-sm-10">
+<textarea style="height:250px; width:450px; overflow:scroll;" ng-model="newAR.Description" placeholder="Description"></textarea>
+
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Status</label>
+            <div class="col-sm-10">
+              <select name="singleSelect" id="singleSelect" ng-model="newAR.Status">
+                <option value="Open">Open</option>
+                <option value="Closed">Closed</option>
+                <option value="Deleted">Deleted</option>
+              </select>
+
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" ng-click="addAR2()">
+          <span class="glyphicon glyphicon-save"></span>  Save Changes
+        </button>
+        <button class="btn btn-default" data-dismiss="modal" ng-click="cancelEdit()">
+          <span class="glyphicon glyphicon-remove"></span>  Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
