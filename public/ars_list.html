@@ -3,10 +3,10 @@
 <body>
       <div class="container">
         <h3>Action Items</h3>
-        <table st-table="displayed" st-safe-src="meetings" class="table table-striped">
+        <table st-table="displayed" st-safe-src="action_items" class="table table-striped">
           <thead>
           <tr>
-            <th>Meeting</th>
+            <th>AR</th>
             <th>Description</th>
             <!--th st-sort="Status">Status</th-->
             <!--th st-sort="OpenDate">Open Date</th-->
@@ -14,7 +14,12 @@
             <th>Open Date</th>
             <th>Due  Date</th>
             <th>Close Date</th>
-            <th><a href="#/new"><i class="glyphicon glyphicon-plus"></i></a></th>
+            <th></th>
+            <th>
+              <button class="btn-link" ng-click="createAR()">
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </th>
           </tr>
           <tr>
             <th colspan="6">
@@ -23,21 +28,20 @@
           </tr>
           </thead>
           <tbody>
-          <tr ng-repeat="meeting in displayed">
-            <td ng-if="meeting.MeetingID>0">{{ meeting.ArID }}</td>
-            <td><button class="btn-link" data-toggle="modal" data-target="#myModal" ng-click="editAR(meeting.ArID)">{{meeting.Description | limitTo:80 | lineFilter }}</button></td>
-            <!--td contentEditable="true" ng-model="meeting.Status">{{meeting.Status}}</td-->
-            <td ng-model="meeting.Status">{{meeting.Status}}</td>
-            <td>{{ meeting.OpenDate | date:"dd/MM/yyyy" }}</td>
-            <td>{{ meeting.DueDate | date:"dd/MM/yyyy" }}</td>
-            <td>{{ meeting.CloseDate | date:"dd/MM/yyyy" }}</td>
+          <tr ng-repeat="action_item in displayed">
+            <td ng-if="action_item.MeetingID>0">{{ action_item.ArID }}</td>
+            <td><button class="btn-link" data-toggle="modal" data-target="#myModal" ng-click="editAR(action_item.ArID)">{{action_item.Description | limitTo:80 | lineFilter }}</button></td>
+            <td ng-model="action_item.Status">{{action_item.Status}}</td>
+            <td>{{ action_item.OpenDate | date:"dd/MM/yyyy" }}</td>
+            <td>{{ action_item.DueDate | date:"dd/MM/yyyy" }}</td>
+            <td>{{ action_item.CloseDate | date:"dd/MM/yyyy" }}</td>
             <td>
-              <button class="btn-link" data-toggle="modal" data-target="#myModal" ng-click="editAR(meeting.ArID)">
+              <button class="btn-link" data-toggle="modal" data-target="#myModal" ng-click="editAR(action_item.ArID)">
                 <span class="glyphicon glyphicon-pencil"></span>
               </button>
             </td>
             <td>
-              <button class="btn-link" ng-click="deleteAR(meeting.ArID)">
+              <button class="btn-link" ng-click="deleteAR(action_item.ArID)">
                 <span class="glyphicon glyphicon-remove"></span>
               </button>
             </td>

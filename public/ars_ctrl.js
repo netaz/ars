@@ -3,7 +3,7 @@ var app = angular.module('ActionRequiredApp', ['smart-table']);
 app.controller('ArCtrl', function ($scope, $http) {
   $http.get('list_ars').success(function(data) {
     $scope.displayed=[];
-    $scope.meetings = data;
+    $scope.action_items = data;
   });
 
   $scope.initAR = function() {
@@ -21,40 +21,59 @@ app.controller('ArCtrl', function ($scope, $http) {
 
   $scope.copyToNewAR = function(ArID) {
     var arrayIdx = $scope.findArrayIdx(ArID);
-    var meeting = $scope.meetings[arrayIdx];
+    var action_item = $scope.action_items[arrayIdx];
     $scope.newAR.ArID = ArID;
-    $scope.newAR.Description = meeting.Description;
-    $scope.newAR.Status = meeting.Status;
-    $scope.newAR.OpenDate = meeting.OpenDate;
-    $scope.newAR.DueDate = meeting.DueDate;
-    $scope.newAR.CloseDate = meeting.CloseDate;
+    $scope.newAR.Description = action_item.Description;
+    $scope.newAR.Status = action_item.Status;
+    $scope.newAR.OpenDate = action_item.OpenDate;
+    $scope.newAR.DueDate = action_item.DueDate;
+    $scope.newAR.CloseDate = action_item.CloseDate;
   }
 
   $scope.copyFromNewAR = function(ArID) {
     var arrayIdx = $scope.findArrayIdx(ArID);
-    var meeting = $scope.meetings[arrayIdx];
+    var action_item = $scope.action_items[arrayIdx];
     $scope.newAR.ArID = ArID;
-    meeting.Description = $scope.newAR.Description;
-    meeting.Status = $scope.newAR.Status;
-    meeting.OpenDate = $scope.newAR.OpenDate;
-    meeting.DueDate = $scope.newAR.DueDate;
-    meeting.CloseDate = $scope.newAR.CloseDate;
+    action_item.Description = $scope.newAR.Description;
+    action_item.Status = $scope.newAR.Status;
+    action_item.OpenDate = $scope.newAR.OpenDate;
+    action_item.DueDate = $scope.newAR.DueDate;
+    action_item.CloseDate = $scope.newAR.CloseDate;
   }
 
   $scope.findArrayIdx = function(id) {
     var arrayIdx = 0;
-    for (; arrayIdx < $scope.meetings.length && $scope.meetings[arrayIdx].ArID !== id; arrayIdx++) {
+    for (; arrayIdx < $scope.action_items.length && $scope.action_items[arrayIdx].ArID !== id; arrayIdx++) {
       // No internal logic is necessary.
     }
+    if ($scope.action_items.length == arrayIdx)
+      return -1;
     return arrayIdx;
+  }
+
+  $scope.findActionItem = function(id) {
+    var arrayIdx = $scope.findArrayIdx(id);
+    if (arrayIdx == -1)
+      return null;
+    var action_item = $scope.action_items[arrayIdx];
+    return action_item;
   }
 
   $scope.commitAR = function() {
       if ($scope.editMode == 'edit') {
         $scope.editMode = null;
         var ar = $scope.newAR;
-
         var ArID = ar.ArID;
+        var action_item = $scope.findActionItem(ArID);
+        if (action_item.Status=="Open" && ar.Status == "Closed") {
+          // status changed: Open ==> Closed
+          ar.CloseDate = new Date(); // today
+        }
+        else if (action_item.Status=="Closed" && ar.Status == "Open")  {
+          // status changed: Closed ==> Open
+          ar.CloseDate = null;
+        }
+
         var data = { ArID,
             Status: ar.Status,
             OpenDate: ar.OpenDate,
@@ -75,20 +94,21 @@ app.controller('ArCtrl', function ($scope, $http) {
         return;
       }
 
+      /// New AR
       var data = { MeetingID:8,
                    Status:$scope.newAR.Status,
                    OpenDate:$scope.newAR.OpenDate,
                    DueDate:$scope.newAR.DueDate,
                    Description:$scope.newAR.Description};
 
-      $scope.meetings.push(data);
+      $scope.action_items.push(data);
       $http.post('/create_ar', data).then(
         function successCallback(response) {
       }, function errorCallback(response) {
         console.log("error");
       });
       $scope.initAR();
-      return $scope.meetings;
+      return $scope.action_items;
   };
 
   $scope.createAR = function(ArID) {
@@ -107,7 +127,7 @@ app.controller('ArCtrl', function ($scope, $http) {
     console.log("deleteAR " + ArID);
     var data = {id:ArID};
     var arrayIdx = $scope.findArrayIdx(ArID);
-    $scope.meetings.splice(arrayIdx, 1);
+    $scope.action_items.splice(arrayIdx, 1);
 
     $http.post('/delete_ar', data).then(function successCallback(response) {
       // this callback will be called asynchronously when the response is available
@@ -125,7 +145,7 @@ app.controller('ArCtrl', function ($scope, $http) {
   $scope.incomplete = false;
   $scope.initAR();
   //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
-  $scope.displayedCollection = [].concat($scope.meetings);
+  $scope.displayedCollection = [].concat($scope.action_items);
 });
 
 app.filter('lineFilter', function () {
@@ -166,78 +186,4 @@ return {
         });
     }
 };
-});
-
-app.controller('DatepickerDemoCtrl', function ($scope) {
-  $scope.today = function() {
-    $scope.dt = new Date();
-  };
-  $scope.today();
-
-  $scope.clear = function () {
-    $scope.dt = null;
-  };
-
-  // Disable weekend selection
-  $scope.disabled = function(date, mode) {
-    return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-  };
-
-  $scope.toggleMin = function() {
-    $scope.minDate = $scope.minDate ? null : new Date();
-  };
-  $scope.toggleMin();
-  $scope.maxDate = new Date(2020, 5, 22);
-
-  $scope.open = function($event) {
-    $scope.status.opened = true;
-  };
-
-  $scope.setDate = function(year, month, day) {
-    $scope.dt = new Date(year, month, day);
-  };
-
-  $scope.dateOptions = {
-    formatYear: 'yy',
-    startingDay: 1
-  };
-
-  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  $scope.format = $scope.formats[0];
-
-  $scope.status = {
-    opened: false
-  };
-
-  var tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  var afterTomorrow = new Date();
-  afterTomorrow.setDate(tomorrow.getDate() + 2);
-  $scope.events =
-    [
-      {
-        date: tomorrow,
-        status: 'full'
-      },
-      {
-        date: afterTomorrow,
-        status: 'partially'
-      }
-    ];
-
-  $scope.getDayClass = function(date, mode) {
-    if (mode === 'day') {
-      var dayToCheck = new Date(date).setHours(0,0,0,0);
-
-      for (var i=0;i<$scope.events.length;i++){
-        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
-
-        if (dayToCheck === currentDay) {
-          return $scope.events[i].status;
-        }
-      }
-    }
-
-    return '';
-  };
 });
