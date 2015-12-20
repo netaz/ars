@@ -36,7 +36,8 @@ function update_ar(req, res) {
         return;
       }
       console.log('UPDATE connected as id ' + connection.threadId + ' AR=' + req.body.ArID);
-      connection.query('update ARs set Status=?, Description=? where ArID=?', [req.body.Status, req.body.Description, req.body.ArID], function(err, result) {
+      connection.query('update ARs set Status=?, Description=?, OpenDate=?, DueDate=?, ResolveDate=? where ArID=?',
+          [req.body.Status, req.body.Description, req.body.OpenDate, req.body.DueDate, req.body.CloseDate, req.body.ArID], function(err, result) {
         if (err) throw err
       });
   });

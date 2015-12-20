@@ -7,8 +7,38 @@ app.controller('ArCtrl', function ($scope, $http) {
   });
 
   $scope.initAR = function() {
-      $scope.newAR = {ArID:0,Description:"", Status:""};
+    var today = new Date();
+    $scope.newAR = {
+        ArID:0, Description : "",
+        Status : "Open",
+        //OpenDate : today.toISOString(),
+        OpenDate : today,
+        DueDate : today,
+        CloseDate : today,
+      };
       $scope.editMode = null;
+  }
+
+  $scope.copyToNewAR = function(ArID) {
+    var arrayIdx = $scope.findArrayIdx(ArID);
+    var meeting = $scope.meetings[arrayIdx];
+    $scope.newAR.ArID = ArID;
+    $scope.newAR.Description = meeting.Description;
+    $scope.newAR.Status = meeting.Status;
+    $scope.newAR.OpenDate = meeting.OpenDate;
+    $scope.newAR.DueDate = meeting.DueDate;
+    $scope.newAR.CloseDate = meeting.CloseDate;
+  }
+
+  $scope.copyFromNewAR = function(ArID) {
+    var arrayIdx = $scope.findArrayIdx(ArID);
+    var meeting = $scope.meetings[arrayIdx];
+    $scope.newAR.ArID = ArID;
+    meeting.Description = $scope.newAR.Description;
+    meeting.Status = $scope.newAR.Status;
+    meeting.OpenDate = $scope.newAR.OpenDate;
+    meeting.DueDate = $scope.newAR.DueDate;
+    meeting.CloseDate = $scope.newAR.CloseDate;
   }
 
   $scope.findArrayIdx = function(id) {
@@ -19,15 +49,21 @@ app.controller('ArCtrl', function ($scope, $http) {
     return arrayIdx;
   }
 
-  $scope.addAR2 = function() {
+  $scope.commitAR = function() {
       if ($scope.editMode == 'edit') {
         $scope.editMode = null;
-        var ArID = $scope.newAR.ArID;
-        var data = {ArID, Status:$scope.newAR.Status, Description:$scope.newAR.Description};
+        var ar = $scope.newAR;
 
-        var arrayIdx = $scope.findArrayIdx(ArID);
-        $scope.meetings[arrayIdx].Description = $scope.newAR.Description;
-        $scope.meetings[arrayIdx].Status = $scope.newAR.Status;
+        var ArID = ar.ArID;
+        var data = { ArID,
+            Status: ar.Status,
+            OpenDate: ar.OpenDate,
+            DueDate: ar.DueDate,
+            CloseDate: ar.CloseDate,
+            Description: ar.Description
+          };
+
+        $scope.copyFromNewAR(ArID);
 
         $http.post('/update_ar', data).then(
           function successCallback(response) {
@@ -39,10 +75,8 @@ app.controller('ArCtrl', function ($scope, $http) {
         return;
       }
 
-      var today = new Date();
-      $scope.newAR.OpenDate = today.toISOString();
-      $scope.newAR.DueDate = today.toISOString();
-      var data = { MeetingID:8, Status:$scope.newAR.Status,
+      var data = { MeetingID:8,
+                   Status:$scope.newAR.Status,
                    OpenDate:$scope.newAR.OpenDate,
                    DueDate:$scope.newAR.DueDate,
                    Description:$scope.newAR.Description};
@@ -50,30 +84,23 @@ app.controller('ArCtrl', function ($scope, $http) {
       $scope.meetings.push(data);
       $http.post('/create_ar', data).then(
         function successCallback(response) {
-
       }, function errorCallback(response) {
         console.log("error");
       });
       $scope.initAR();
-      //$scope.isNew = false;
       return $scope.meetings;
   };
 
-  $scope.editAR = function(ArID) {
-    console.log("been here " + ArID);
-    //$scope.$parent.frame_url = "ars_edit.html";
-    //$scope.$parent.$apply(function () {$scope.frame_url = "ars_edit.html"; });
+  $scope.createAR = function(ArID) {
+    console.log("createAR (new)");
+    $scope.initAR();
+    $scope.editMode = 'new';
+  }
 
-    if (ArID == 'new') {
-      $scope.newAR = {Description:"", Status:"Open"};
-      $scope.editMode = 'new';
-    } else {
-      $scope.editMode = 'edit';
-      $scope.newAR.ArID = ArID;
-      var arrayIdx = $scope.findArrayIdx(ArID);
-      $scope.newAR.Description = $scope.meetings[arrayIdx].Description;
-      $scope.newAR.Status = $scope.meetings[arrayIdx].Status;
-    }
+  $scope.editAR = function(ArID) {
+    console.log("editAR " + ArID);
+    $scope.editMode = 'edit';
+    $scope.copyToNewAR(ArID);
   }
 
   $scope.deleteAR = function(ArID) {
@@ -92,7 +119,6 @@ app.controller('ArCtrl', function ($scope, $http) {
 
   $scope.cancelEdit = function() {
     $scope.initAR();
-    //$scope.frame_url = "ars_list.html";
   }
 
   $scope.error = false;
@@ -140,4 +166,78 @@ return {
         });
     }
 };
+});
+
+app.controller('DatepickerDemoCtrl', function ($scope) {
+  $scope.today = function() {
+    $scope.dt = new Date();
+  };
+  $scope.today();
+
+  $scope.clear = function () {
+    $scope.dt = null;
+  };
+
+  // Disable weekend selection
+  $scope.disabled = function(date, mode) {
+    return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+  };
+
+  $scope.toggleMin = function() {
+    $scope.minDate = $scope.minDate ? null : new Date();
+  };
+  $scope.toggleMin();
+  $scope.maxDate = new Date(2020, 5, 22);
+
+  $scope.open = function($event) {
+    $scope.status.opened = true;
+  };
+
+  $scope.setDate = function(year, month, day) {
+    $scope.dt = new Date(year, month, day);
+  };
+
+  $scope.dateOptions = {
+    formatYear: 'yy',
+    startingDay: 1
+  };
+
+  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[0];
+
+  $scope.status = {
+    opened: false
+  };
+
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var afterTomorrow = new Date();
+  afterTomorrow.setDate(tomorrow.getDate() + 2);
+  $scope.events =
+    [
+      {
+        date: tomorrow,
+        status: 'full'
+      },
+      {
+        date: afterTomorrow,
+        status: 'partially'
+      }
+    ];
+
+  $scope.getDayClass = function(date, mode) {
+    if (mode === 'day') {
+      var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+      for (var i=0;i<$scope.events.length;i++){
+        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+        if (dayToCheck === currentDay) {
+          return $scope.events[i].status;
+        }
+      }
+    }
+
+    return '';
+  };
 });
