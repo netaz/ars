@@ -1,4 +1,5 @@
 <!-- Include Bootstrap Datepicker -->
+
 <div id="myModal" class="modal fade" role="dialog" style="overflow:scroll;">
   <div class="modal-dialog">
     <!-- Modal content-->
@@ -8,41 +9,80 @@
         <h4 class="modal-title">Edit AR</h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal"  role="form">
 
-          <div class="form-group">
-            <label class="row-md-2 control-label">Open Date: {{newAR.OpenDate | date:'dd-MM-yyyy' }}</label>
-            <br />
-            <label class="row-md-2 control-label">Close Date: {{newAR.CloseDate | date:'dd-MM-yyyy' }}</label>
-          </div>
+        <form class="form-horizontal">
 
-          <div class="form-group">
-            <label class="col-md-2 control-label">Due Date</label>
-            <div class="col-md-4">
-                <p class="input-group">
-                  <input type="date" class="form-control" uib-datepicker-popup='dd-MMMM-yyyy' ng-model="newAR.DueDate"  ng-required="true"/>
-                </p>
+          <div class="row">
+            <div class="col-xs-3">
+                <label class="control-label">Open Date: </label>
+            </div>
+            <div class="col-xs-3">
+                <p class="form-control-static">{{newAR.OpenDate | date:'dd-MM-yyyy' }}</p>
             </div>
           </div>
+          <br>
 
-          <div class="form-group">
-            <label class="col-sm-2 control-label">Description</label>
-            <div class="col-sm-10">
-              <textarea style="height:250px; width:450px; overflow:scroll;" ng-model="newAR.Description" placeholder="Description"></textarea>
+          <div class="row">
+            <div class="col-xs-3">
+                <label class="control-label">Close Date: </label>
+            </div>
+            <div class="col-xs-3">
+                <p class="form-control-static">{{newAR.CloseDate | date:'dd-MM-yyyy' }}</p>
             </div>
           </div>
+          <br>
 
-          <div class="form-group">
-            <label class="col-sm-2 control-label">Status</label>
-            <div class="col-sm-10">
+          <div class="row">
+            <div class="col-xs-3">
+                <label class="control-label">Due Date: </label>
+            </div>
+            <div class="col-xs-9">
+              <p class="input-group">
+                <input type="date" class="form-control" uib-datepicker-popup='dd-MMMM-yyyy' ng-model="newAR.DueDate"  ng-required="true"/>
+              </p>
+            </div>
+          </div>
+          <br>
+
+          <div class="row">
+            <div class="col-xs-3">
+                <label class="control-label">Description: </label>
+            </div>
+            <div class="col-xs-9">
+              <textarea style="height:250px; width:400px; overflow:scroll;" ng-model="newAR.Description" placeholder="Description"></textarea>
+            </div>
+          </div>
+          <br>
+
+
+          <div class="row">
+            <div class="col-xs-3">
+                <label class="control-label">Status: </label>
+            </div>
+            <div class="col-xs-3">
               <select name="singleSelect" id="singleSelect" ng-model="newAR.Status">
                 <option value="Open">Open</option>
                 <option value="Closed">Closed</option>
                 <option value="Deleted">Deleted</option>
               </select>
-
             </div>
           </div>
+          <br>
+
+          <div class="row">
+            <div class="col-xs-3">
+                <label class="control-label">Assigned to: </label>
+            </div>
+            <div class="col-xs-3">
+              <select name="singleSelect" id="singleSelect"  ng-model="newAR.Owner">
+                <option value="">---Add New---</option> <!-- not selected / blank option -->
+                <option value="Leonard">Leonard</option>
+                <option value="Sheldon">Sheldon sdfsdsdfsfsdfsfafs</option>
+                <option value="Wolowitz">Wolowitz</option>
+              </select>
+            </div>
+          </div>
+          <br>
 
         </form>
       </div>
