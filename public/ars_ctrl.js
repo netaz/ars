@@ -6,6 +6,10 @@ app.controller('ArCtrl', function ($scope, $http) {
     $scope.action_items = data;
   });
 
+  $http.get('list_users').success(function(data) {
+    $scope.users = data;
+  });
+
   $scope.initAR = function() {
     var today = new Date();
     $scope.newAR = {
@@ -15,6 +19,7 @@ app.controller('ArCtrl', function ($scope, $http) {
         OpenDate : today,
         DueDate : today,
         CloseDate : today,
+        OwnerID: null
       };
       $scope.editMode = null;
   }
@@ -28,6 +33,7 @@ app.controller('ArCtrl', function ($scope, $http) {
     $scope.newAR.OpenDate = action_item.OpenDate;
     $scope.newAR.DueDate = action_item.DueDate;
     $scope.newAR.CloseDate = action_item.CloseDate;
+    $scope.newAR.OwnerID = action_item.OwnerID;
   }
 
   $scope.copyFromNewAR = function(ArID) {
@@ -39,6 +45,7 @@ app.controller('ArCtrl', function ($scope, $http) {
     action_item.OpenDate = $scope.newAR.OpenDate;
     action_item.DueDate = $scope.newAR.DueDate;
     action_item.CloseDate = $scope.newAR.CloseDate;
+    action_item.OwnerID = $scope.newAR.OwnerID;
   }
 
   $scope.findArrayIdx = function(id) {
@@ -79,7 +86,8 @@ app.controller('ArCtrl', function ($scope, $http) {
             OpenDate: ar.OpenDate,
             DueDate: ar.DueDate,
             CloseDate: ar.CloseDate,
-            Description: ar.Description
+            Description: ar.Description,
+            OwnerID: ar.OwnerID
           };
 
         $scope.copyFromNewAR(ArID);
@@ -95,11 +103,13 @@ app.controller('ArCtrl', function ($scope, $http) {
       }
 
       /// New AR
-      var data = { MeetingID:8,
-                   Status:$scope.newAR.Status,
-                   OpenDate:$scope.newAR.OpenDate,
-                   DueDate:$scope.newAR.DueDate,
-                   Description:$scope.newAR.Description};
+      var data = { MeetingID: 8,
+                   Status: $scope.newAR.Status,
+                   OpenDate: $scope.newAR.OpenDate,
+                   DueDate: $scope.newAR.DueDate,
+                   Description: $scope.newAR.Description,
+                   OwnerID: $scope.newAR.OwnerID
+                 };
 
       $scope.action_items.push(data);
       $http.post('/create_ar', data).then(

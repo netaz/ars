@@ -7,7 +7,7 @@ var connection  = mysql.createConnection({
 });
 
 connection.connect();
-connection.query('DROP TABLE ARs', function(err) {
+connection.query('DROP TABLE IF EXISTS ARs', function(err) {
   if (err)
     console.log('error');
 });
@@ -29,7 +29,7 @@ connection.query(`CREATE TABLE ARs
       console.log('error');
 });
 
-connection.query('DROP TABLE Users', function(err) {
+connection.query('DROP TABLE IF EXISTS Users', function(err) {
   if (err)
     console.log('error');
 });
