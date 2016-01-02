@@ -91,13 +91,17 @@
     </div>
 
     <div class="col-sm-8 text-left">
-      <div ng-include="'ars_list.html'"></div>
+      <!--This will be populated by content injected when we activate states-->
+      <!--Meanwhile, we display the default view-->
+      <div ui-view>
+        <div ng-include="'ars_list.html'"></div>
+      </div>
     </div>
   </div>
 
   <!-- Modal -->
   <div ng-include="'ar_editor.html'"></div>
-
+</div>
 <footer class="container-fluid text-center">
   <div class="container">
       <button class="btn btn-success" data-toggle="modal" data-target="#myModal" ng-click="createAR()">

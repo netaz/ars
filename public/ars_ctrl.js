@@ -34,6 +34,31 @@ ActionItem.prototype.assign = function(other) {
   this.OwnerID = other.OwnerID;
 };
 
+//------------------------------------------------------------
+app.config(function($stateProvider, $urlRouterProvider) {
+
+    $urlRouterProvider.otherwise('/ars_list.html');
+
+    $stateProvider
+
+        // HOME STATES AND NESTED VIEWS ========================================
+        .state('home', {
+            url: '/home',
+            templateUrl: 'ars_list.html'
+        })
+
+        .state('meetings', {
+            template: '<h1>Meetings<h1>'
+        })
+
+        .state('users', {
+            template: '<h1>Users<h1>'
+        })
+        .state('projects', {
+            template: '<h1>Projects<h1>'
+        })
+
+});
 
 //------------------------------------------------------------
 
