@@ -12,16 +12,6 @@ var pool      =    mysql.createPool({
     debug    :  false
 });
 
-/*
-function Apple (type) {
-    this.type = type;
-    this.color = "red";
-}
-
-Apple.prototype.getInfo = function() {
-    return this.color + ' ' + this.type + ' apple';
-};
-*/
 
 function create_ar(req, res) {
   pool.getConnection(function(err,connection){
