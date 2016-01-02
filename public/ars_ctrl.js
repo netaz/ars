@@ -1,5 +1,42 @@
 var app = angular.module('ActionRequiredApp', ['smart-table']);
 
+// Copy constructor
+function ActionItem (other) {
+  if(undefined == other) {
+    var today = new Date();
+    this.ArID = 0;
+    this.Description = "",
+    this.Status = "Open",
+    //this.OpenDate = today.toISOString(),
+    this.OpenDate = today;
+    this.DueDate = today;
+    this.CloseDate = today;
+    this.OwnerID = null;
+  } else {
+    this.ArID = other.ArID;
+    this.Description = other.Description,
+    this.Status = other.Status,
+    this.OpenDate = other.OpenDate;
+    this.DueDate = other.DueDate;
+    this.CloseDate = other.CloseDate;
+    this.OwnerID = other.OwnerID;
+
+  }
+}
+
+ActionItem.prototype.assign = function(other) {
+  this.ArID = other.ArID;
+  this.Description = other.Description,
+  this.Status = other.Status,
+  this.OpenDate = other.OpenDate;
+  this.DueDate = other.DueDate;
+  this.CloseDate = other.CloseDate;
+  this.OwnerID = other.OwnerID;
+};
+
+
+//------------------------------------------------------------
+
 app.controller('ArCtrl', function ($scope, $http) {
   $http.get('list_ars').success(function(data) {
     $scope.displayed=[];
@@ -10,9 +47,19 @@ app.controller('ArCtrl', function ($scope, $http) {
     $scope.users = data;
   });
 
+  $scope.getUserName = function(userid) {
+    var i = 0;
+    for (; i < $scope.users.length && $scope.users[i].UserID !== userid; i++) {
+      // No internal logic is necessary.
+    }
+    if ($scope.users.length == i)
+      return "";
+    return $scope.users[i].FirstName + " " + $scope.users[i].LastName;
+  }
+
   $scope.initAR = function() {
-    var today = new Date();
-    $scope.newAR = {
+    //var today = new Date();
+/*    $scope.newAR = {
         ArID:0, Description : "",
         Status : "Open",
         //OpenDate : today.toISOString(),
@@ -21,31 +68,44 @@ app.controller('ArCtrl', function ($scope, $http) {
         CloseDate : today,
         OwnerID: null
       };
+*/    $scope.newAR = new ActionItem();
       $scope.editMode = null;
   }
 
   $scope.copyToNewAR = function(ArID) {
     var arrayIdx = $scope.findArrayIdx(ArID);
     var action_item = $scope.action_items[arrayIdx];
-    $scope.newAR.ArID = ArID;
+//    action_item..ArID = ArID;
+/*    $scope.newAR.ArID = ArID;
     $scope.newAR.Description = action_item.Description;
     $scope.newAR.Status = action_item.Status;
     $scope.newAR.OpenDate = action_item.OpenDate;
     $scope.newAR.DueDate = action_item.DueDate;
     $scope.newAR.CloseDate = action_item.CloseDate;
     $scope.newAR.OwnerID = action_item.OwnerID;
+*/
+    $scope.newAR = new ActionItem(action_item);
+    if ($scope.newAR.OwnerID != null)
+      $scope.newAR.OwnerID = $scope.newAR.OwnerID.toString();
   }
 
   $scope.copyFromNewAR = function(ArID) {
     var arrayIdx = $scope.findArrayIdx(ArID);
     var action_item = $scope.action_items[arrayIdx];
-    $scope.newAR.ArID = ArID;
+
+    action_item.assign = ActionItem.prototype.assign;
+/*
     action_item.Description = $scope.newAR.Description;
     action_item.Status = $scope.newAR.Status;
     action_item.OpenDate = $scope.newAR.OpenDate;
     action_item.DueDate = $scope.newAR.DueDate;
     action_item.CloseDate = $scope.newAR.CloseDate;
     action_item.OwnerID = $scope.newAR.OwnerID;
+*/
+if ($scope.newAR.OwnerID != null)
+  $scope.newAR.OwnerID = parseInt($scope.newAR.OwnerID);
+
+    action_item.assign($scope.newAR);
   }
 
   $scope.findArrayIdx = function(id) {
@@ -122,19 +182,19 @@ app.controller('ArCtrl', function ($scope, $http) {
   };
 
   $scope.createAR = function(ArID) {
-    console.log("createAR (new)");
+    //console.log("createAR (new)");
     $scope.initAR();
     $scope.editMode = 'new';
   }
 
   $scope.editAR = function(ArID) {
-    console.log("editAR " + ArID);
+    //console.log("editAR " + ArID);
     $scope.editMode = 'edit';
     $scope.copyToNewAR(ArID);
   }
 
   $scope.deleteAR = function(ArID) {
-    console.log("deleteAR " + ArID);
+    //console.log("deleteAR " + ArID);
     var data = {id:ArID};
     var arrayIdx = $scope.findArrayIdx(ArID);
     $scope.action_items.splice(arrayIdx, 1);

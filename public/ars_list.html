@@ -6,11 +6,12 @@
         <table st-table="displayed" st-safe-src="action_items" class="table table-striped">
           <thead>
           <tr>
-            <th>AR</th>
+            <th>ID</th>
             <th>Description</th>
             <!--th st-sort="Status">Status</th-->
             <!--th st-sort="OpenDate">Open Date</th-->
             <th>Status</th>
+            <th>Owner</th>
             <th>Open Date</th>
             <th>Due  Date</th>
             <th>Close Date</th>
@@ -32,6 +33,7 @@
             <td ng-if="action_item.MeetingID>0">{{ action_item.ArID }}</td>
             <td><button class="btn-link" data-toggle="modal" data-target="#myModal" ng-click="editAR(action_item.ArID)">{{action_item.Description | limitTo:80 | lineFilter }}</button></td>
             <td ng-model="action_item.Status">{{action_item.Status}}</td>
+            <td ng-model="action_item.OwnerID">{{getUserName(action_item.OwnerID)}}</td>
             <td>{{ action_item.OpenDate | date:"dd/MM/yyyy" }}</td>
             <td>{{ action_item.DueDate | date:"dd/MM/yyyy" }}</td>
             <td>{{ action_item.CloseDate | date:"dd/MM/yyyy" }}</td>

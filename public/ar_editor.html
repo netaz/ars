@@ -74,7 +74,7 @@
             </div>
             <div class="col-xs-3">
               <select name="singleSelect" id="singleSelect"  ng-model="newAR.OwnerID">
-                  <option ng-repeat="user in users" value={{user.UserID}}>{{user.LastName}}, {{user.FirstName }}</option>
+                  <option ng-repeat="user in users" value={{user.UserID}}>{{user.FirstName}} {{user.LastName}}</option>
               </select>
             </div>
           </div>
