@@ -1,5 +1,3 @@
-var app = angular.module('ActionRequiredApp', ['smart-table','ui.router']);
-
 // Copy constructor
 function ActionItem (other) {
   if(undefined == other) {
@@ -20,7 +18,6 @@ function ActionItem (other) {
     this.DueDate = other.DueDate;
     this.CloseDate = other.CloseDate;
     this.OwnerID = other.OwnerID;
-
   }
 }
 
@@ -33,32 +30,6 @@ ActionItem.prototype.assign = function(other) {
   this.CloseDate = other.CloseDate;
   this.OwnerID = other.OwnerID;
 };
-
-//------------------------------------------------------------
-app.config(function($stateProvider, $urlRouterProvider) {
-
-    $urlRouterProvider.otherwise('/ars_list.html');
-
-    $stateProvider
-
-        // HOME STATES AND NESTED VIEWS ========================================
-        .state('home', {
-            url: '/home',
-            templateUrl: 'ars_list.html'
-        })
-
-        .state('meetings', {
-            template: '<h1>Meetings<h1>'
-        })
-
-        .state('users', {
-            template: '<h1>Users<h1>'
-        })
-        .state('projects', {
-            template: '<h1>Projects<h1>'
-        })
-
-});
 
 //------------------------------------------------------------
 
@@ -83,32 +54,13 @@ app.controller('ArCtrl', function ($scope, $http) {
   }
 
   $scope.initAR = function() {
-    //var today = new Date();
-/*    $scope.newAR = {
-        ArID:0, Description : "",
-        Status : "Open",
-        //OpenDate : today.toISOString(),
-        OpenDate : today,
-        DueDate : today,
-        CloseDate : today,
-        OwnerID: null
-      };
-*/    $scope.newAR = new ActionItem();
+      $scope.newAR = new ActionItem();
       $scope.editMode = null;
   }
 
   $scope.copyToNewAR = function(ArID) {
     var arrayIdx = $scope.findArrayIdx(ArID);
     var action_item = $scope.action_items[arrayIdx];
-//    action_item..ArID = ArID;
-/*    $scope.newAR.ArID = ArID;
-    $scope.newAR.Description = action_item.Description;
-    $scope.newAR.Status = action_item.Status;
-    $scope.newAR.OpenDate = action_item.OpenDate;
-    $scope.newAR.DueDate = action_item.DueDate;
-    $scope.newAR.CloseDate = action_item.CloseDate;
-    $scope.newAR.OwnerID = action_item.OwnerID;
-*/
     $scope.newAR = new ActionItem(action_item);
     if ($scope.newAR.OwnerID != null)
       $scope.newAR.OwnerID = $scope.newAR.OwnerID.toString();
@@ -119,14 +71,6 @@ app.controller('ArCtrl', function ($scope, $http) {
     var action_item = $scope.action_items[arrayIdx];
 
     action_item.assign = ActionItem.prototype.assign;
-/*
-    action_item.Description = $scope.newAR.Description;
-    action_item.Status = $scope.newAR.Status;
-    action_item.OpenDate = $scope.newAR.OpenDate;
-    action_item.DueDate = $scope.newAR.DueDate;
-    action_item.CloseDate = $scope.newAR.CloseDate;
-    action_item.OwnerID = $scope.newAR.OwnerID;
-*/
 if ($scope.newAR.OwnerID != null)
   $scope.newAR.OwnerID = parseInt($scope.newAR.OwnerID);
 
