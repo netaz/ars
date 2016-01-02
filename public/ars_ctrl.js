@@ -1,4 +1,4 @@
-var app = angular.module('ActionRequiredApp', ['smart-table']);
+var app = angular.module('ActionRequiredApp', ['smart-table','ui.router']);
 
 // Copy constructor
 function ActionItem (other) {

@@ -3,14 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-smart-table/2.1.6/smart-table.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
   <script src="ars_ctrl.js"></script>
+  <!-- CSS (load bootstrap) -->
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */
     .navbar {
@@ -45,7 +48,11 @@
     }
   </style>
 </head>
+
+<!-- angular app -->
 <body ng-app="ActionRequiredApp" ng-controller="ArCtrl">
+
+<!-- NAVIGATION -->
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -58,18 +65,23 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">Meetings</a></li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">ARs</a></li>
+        <li><a ui-sref="home">Home</a></li>
+        <li><a ui-sref="meetings">Meetings</a></li>
+        <li><a ui-sref="projects">Projects</a></li>
+        <li><a ui-sref="users">Users</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <!--ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
+      </ul-->
+      <p class = "navbar-text navbar-right">
+         Signed in as <a href = "#" class = "navbar-link">Neta</a>
+      </p>
     </div>
   </div>
 </nav>
 
+<!-- MAIN CONTENT -->
 <div class="container-fluid text-center" name="maindiv">
   <div class="row content">
     <div class="col-sm-2 sidenav">
@@ -79,9 +91,7 @@
     </div>
 
     <div class="col-sm-8 text-left">
-
       <div ng-include="'ars_list.html'"></div>
-      <!--iframe width="100%" height="500px" ng-src={{frame_url}} name="iframe_a"></iframe-->
     </div>
   </div>
 
@@ -89,13 +99,11 @@
   <div ng-include="'ar_editor.html'"></div>
 
 <footer class="container-fluid text-center">
-
   <div class="container">
       <button class="btn btn-success" data-toggle="modal" data-target="#myModal" ng-click="createAR()">
         <span class="glyphicon glyphicon-plus"></span> Create New AR
       </button>
   </div>
-
 </footer>
 </body>
 </html>
