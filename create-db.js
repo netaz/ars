@@ -46,17 +46,40 @@ connection.query(`CREATE TABLE Users
       console.log('error');
 });
 
-connection.query('INSERT INTO Users (LastName, FirstName, Email) values (?, ?, ?)', ["", "Leonard", ""], function(err) {
+connection.query('INSERT INTO Users (LastName, FirstName, Email) values (?, ?, ?)', ["Hofstadter", "Leonard", "leonard@intel.com"], function(err) {
   if (err)
     console.log('error');
 });
-connection.query('INSERT INTO Users (LastName, FirstName, Email) values (?, ?, ?)', ["", "Sheldon", ""], function(err) {
+connection.query('INSERT INTO Users (LastName, FirstName, Email) values (?, ?, ?)', ["Cooper", "Sheldon", "sheldon@intel.com"], function(err) {
   if (err)
     console.log('error');
 });
-connection.query('INSERT INTO Users (LastName, FirstName, Email) values (?, ?, ?)', ["Wolowitz", "", ""], function(err) {
+
+connection.query('INSERT INTO Users (LastName, FirstName, Email) values (?, ?, ?)', ["Wolowitz", "Howard", "howard@intel.com"], function(err) {
   if (err)
     console.log('error');
+});
+
+
+connection.query('DROP TABLE IF EXISTS Meetings', function(err) {
+  if (err)
+    console.log('error dropping Meetings');
+});
+
+connection.query(`CREATE TABLE Meetings
+  (
+    MeetingID int not null auto_increment,
+    PRIMARY KEY(MeetingID ),
+    Title varchar(255),
+    Date DATE
+  )`, function(err) {
+    if (err)
+      console.log('error creating Meetings ', err);
+});
+
+connection.query('INSERT INTO Meetings (Title ) values (?)', ["This is the first meeting"], function(err) {
+  if (err)
+    console.log('error ', error);
 });
 
 

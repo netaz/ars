@@ -12,7 +12,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
         })
 
         .state('meetings', {
-            template: '<h1>Meetings<h1>'
+          templateUrl: 'meetings_list.html',
+          controller: 'MeetingsCtrl'
         })
 
         .state('users', {

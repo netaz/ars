@@ -88,7 +88,7 @@ function get_ar_list(req,res) {
   });
 }
 
-function get_user_list(req,res) {
+function get_users_list(req,res) {
     pool.getConnection(function(err,connection){
         if (err) {
           connection.release();
@@ -111,15 +111,40 @@ function get_user_list(req,res) {
   });
 }
 
+function get_meetings_list(req,res) {
+    pool.getConnection(function(err,connection){
+        if (err) {
+          connection.release();
+          res.json({"code" : 100, "status" : "Error in connection database"});
+          return;
+        }
+
+        console.log('LIST meetings: connected as id ' + connection.threadId);
+        connection.query("select * from Meetings",function(err,rows){
+            connection.release();
+            if(!err) {
+                res.json(rows);
+            }
+        });
+
+        connection.on('error', function(err) {
+              res.json({"code" : 100, "status" : "Error in connection database"});
+              return;
+        });
+  });
+}
+
+
 //app.use(express.bodyParser());
 app.use(bodyParser.json())
 
 // Event listeners
 app.get("/list_ars",function(req,res) { get_ar_list(req,res); });
-app.get("/list_users",function(req,res) { get_user_list(req,res); });
 app.post("/create_ar",function(req,res) { create_ar(req, res); });
 app.post("/update_ar",function(req,res) { update_ar(req, res); });
 app.post("/delete_ar",function(req,res) { delete_ar(req, res); });
+app.get("/list_users",function(req,res) { get_users_list(req,res); });
+app.get("/list_meetings",function(req,res) { get_meetings_list(req,res); });
 
 app.use(express.static('public'));
 app.listen(1337);
